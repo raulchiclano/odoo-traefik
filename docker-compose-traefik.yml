@@ -37,7 +37,7 @@ services:
 
     labels:
       - traefik.enable=true
-      - traefik.http.services.odoo.loadbalancer.server.port=8079
+      - traefik.http.services.odoo_traefik.loadbalancer.server.port=8069
       - traefik.http.routers.odoo_traefik.entrypoints=web
       - traefik.http.routers.odoo_traefik.rule=Host(`${FQDN}`)
       - traefik.http.middlewares.odoo_traefik-https-redirect.redirectscheme.scheme=websecure
