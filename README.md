@@ -1,27 +1,22 @@
 # Odoo 15
 
-The repository support run odoo 15 in docker.
+The repository support run odoo 15 in docker whith traefik.
 
 ## How to run?
 
 ```bash
 
-git clone https://github.com/dylanops/docker-odoo.git
+git clone https://github.com/raulchiclano/odoo-traefik.git
 
-cd docker-odoo
+cd odoo-traefik
 
 cp .env.sample .env
 
-docker-compose up -d
+docker-compose -f docker-compose-traefik.yml up -d
 
 docker exec -ti --user root odoo chown -R odoo:odoo /mnt/extra-addons/ var/lib/odoo/
 
 ```
-
-## Install odoo
-
-* Go to [http://localhost:8069/](http://localhost:8069/)
-* Database Name: odoo
 
 ## How to create custom module?
 
