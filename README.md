@@ -14,7 +14,7 @@ cp .env.sample .env
 
 docker-compose -f docker-compose-traefik.yml up -d
 
-docker exec -ti --user root odoo chown -R odoo:odoo /mnt/extra-addons/ var/lib/odoo/
+docker exec -ti --user root odoo-traefik chown -R odoo:odoo /mnt/extra-addons/ var/lib/odoo/
 
 ```
 
