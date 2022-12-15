@@ -1,0 +1,57 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:13
+    container_name: postgres_traefik
+    restart: always
+#    ports:
+#      - "5432:5432"
+    networks:
+      - internal
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+
+  odoo:
+    image: odoo:15
+    container_name: odoo-traefik
+    restart: always
+    depends_on:
+      - postgres
+#    ports:
+#     - "8069:8069"
+#      - "8072:8072"
+    networks:
+      - internal
+      - proxy
+
+    environment:
+      HOST: postgres
+      USER: ${POSTGRES_USER}
+      PASSWORD: ${POSTGRES_PASSWORD}
+
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.odoo.loadbalancer.server.port=8079
+      - traefik.http.routers.odoo_traefik.entrypoints=web
+      - traefik.http.routers.odoo_traefik.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.odoo_traefik-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.odoo.middlewares=odoo_traefik-https-redirect
+      - traefik.http.routers.odoo_traefik-secure.entrypoints=websecure
+      - traefik.http.routers.odoo_traefik-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.odoo_traefik-secure.tls=true
+      - traefik.http.routers.odoo_traefik-secure.tls.certresolver=letsencrypt
+    volumes:
+      - ./etc/odoo:/etc/odoo
+      - ./data/addons:/mnt/extra-addons
+      - ./data/odoo:/var/lib/odoo
+
+networks:
+  internal:
+  proxy:
+    external: true
