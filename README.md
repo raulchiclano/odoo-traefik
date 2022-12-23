@@ -16,6 +16,15 @@ docker-compose -f docker-compose-traefik.yml up -d
 
 docker exec -ti --user root odoo chown -R odoo:odoo /mnt/extra-addons/ var/lib/odoo/
 
+sudo touch /etc/odoo/odoo.conf
+sudo nano /etc/odoo/odoo.conf
+  and add "
+  [options]
+  addons_path = /mnt/extra-addons
+  data_dir = /var/lib/odoo
+
+  "
+
 ```
 
 ## How to create custom module?
